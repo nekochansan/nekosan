@@ -80,7 +80,7 @@ class NekochanAI:
     石を置く位置を評価関数を使って決定する戦略的なAI。
     """
     def face(self):
-        return "🧠"
+        return "🐱"
 
     def place(self, board, stone):
         """
@@ -100,4 +100,5 @@ class NekochanAI:
                         best_score = score
                         best_move = (x, y)
 
-        return best_move
+        # 置ける場所がない場合は (-1, -1) を返す
+        return best_move if best_move else (-1, -1)
