@@ -15,6 +15,16 @@ board = [
     [0, 0, 0, 0, 0, 0],
 ]
 
+# ボード上の位置に対するスコア
+POSITION_SCORES = [
+    [20, -3, 11, 8, 8, 11],
+    [-3, -4, 7, 4, 4, 7],
+    [11, 7, 6, 3, 3, 6],
+    [8, 4, 3, 0, 0, 3],
+    [8, 4, 3, 0, 0, 3],
+    [11, 7, 6, 3, 3, 6],
+]
+
 def evaluate_board(board, stone):
     """
     現在の盤面の評価値を計算する。
@@ -27,6 +37,32 @@ def evaluate_board(board, stone):
             elif board[y][x] == (3 - stone):
                 score -= POSITION_SCORES[y][x]
     return score
+
+def can_place_x_y(board, stone, x, y):
+    """
+    指定した位置 (x, y) に stone の石を置けるかを判定する。
+    """
+    if board[y][x] != 0:  # 空きマスでない場合は置けない
+        return False
+
+    opponent = 3 - stone
+    directions = [(-1, -1), (-1, 0), (-1, 1),
+                  (0, -1),          (0, 1),
+                  (1, -1), (1, 0), (1, 1)]
+
+    for dx, dy in directions:
+        nx, ny = x + dx, y + dy
+        found_opponent = False
+
+        while 0 <= nx < len(board[0]) and 0 <= ny < len(board) and board[ny][nx] == opponent:
+            found_opponent = True
+            nx += dx
+            ny += dy
+
+        if found_opponent and 0 <= nx < len(board[0]) and 0 <= ny < len(board) and board[ny][nx] == stone:
+            return True
+
+    return False
 
 def apply_move(board, stone, x, y):
     """
