@@ -125,7 +125,7 @@ def minimax(board, stone, depth, maximizing_player):
                         best_move = (x, y)
         return min_eval, best_move
 
-class MinimaxAI:
+class nekosanAI:
     """
     ミニマックス法を用いたAI。
     """
@@ -133,7 +133,7 @@ class MinimaxAI:
         self.depth = depth
 
     def face(self):
-        return "🤖"
+        return "🐱"
 
     def place(self, board, stone):
         """
