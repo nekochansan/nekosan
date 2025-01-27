@@ -124,6 +124,17 @@ def minimax(board, stone, depth, maximizing_player):
                         min_eval = eval
                         best_move = (x, y)
         return min_eval, best_move
+        
+def find_valid_moves(board, stone):
+    """
+    現在の盤面で stone を置けるすべての合法手をリストとして返す。
+    """
+    valid_moves = []
+    for y in range(len(board)):
+        for x in range(len(board[0])):
+            if can_place_x_y(board, stone, x, y):
+                valid_moves.append((x, y))
+    return valid_moves
 
 class nekosanAI:
     """
@@ -139,5 +150,10 @@ class nekosanAI:
         """
         ミニマックス法を用いて最善の手を計算する。
         """
+        valid_moves = find_valid_moves(board, stone)  # 置ける場所を探す
+        if not valid_moves:  # 置ける場所がない場合
+            return (-1, -1)  # パスを示す
+
         _, best_move = minimax(board, stone, self.depth, True)
-        return best_move if best_move else (-1, -1)
+        return best_move if best_move in valid_moves else valid_moves[0]
+
