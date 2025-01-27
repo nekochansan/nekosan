@@ -138,9 +138,18 @@ class nekosanAI:
         アルファベータ法を用いて最善の手を計算する。
         終盤では完全探索を行う。
         """
-        remaining_moves = len(find_valid_moves(board, stone)) + len(find_valid_moves(board, 3 - stone))
+        valid_moves = find_valid_moves(board, stone)  # 置ける合法手を取得
+        if not valid_moves:  # 合法手がない場合はパス
+            return (-1, -1)
+
+        remaining_moves = len(valid_moves) + len(find_valid_moves(board, 3 - stone))
         if remaining_moves <= 12:  # 終盤と判断
             _, best_move = alphabeta(board, stone, self.endgame_depth, float('-inf'), float('inf'), True, self.tt)
         else:
             _, best_move = alphabeta(board, stone, self.depth, float('-inf'), float('inf'), True, self.tt)
-        return best_move if best_move else (-1, -1)
+
+        # 返された手が合法手に含まれるか確認し、含まれない場合は最初の合法手を選択
+        if best_move not in valid_moves:
+            best_move = valid_moves[0]
+
+        return best_move
